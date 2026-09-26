@@ -1,0 +1,241 @@
+Script started on 2026-09-26 14:25:26+00:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="112" LINES="13"]
+[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ c[Kls
+[?2004lProduct.java  SimpleTester.java  WishList.java  WishListItem.java  myScript  myScript.txt
+[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ cd[Kat Product.java 
+[?2004lpublic class Product {
+
+    private static int idCounter = 1;
+
+    private String productID;
+    private String name;
+    private int quantity;
+    private double salePrice;
+
+    public Product(String name, int quantity, double salePrice) {
+
+        this.productID = "PR" + idCounter++;
+        this.name = name;
+        this.quantity = quantity;
+        this.salePrice = salePrice;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getSalePrice() {
+        return salePrice;
+    }
+}[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ cat WishListi[KItem.java 
+[?2004lpublic class WishListItem {
+
+    private Product product;
+    private int quantity;
+
+    public WishListItem(Product product, int quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+    @Override 
+    public String toString(){
+        return " product: " + product.getName() +
+                " ID: " + product.getProductID()+
+                " Quantity: " + product.getQuantity()+
+                " Price: " + product.getSalePrice();
+    }
+
+}[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ cat wishLis[K[K[K[K[K[K[KWishList.java 
+[?2004limport java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+public class WishList {
+
+    private List<WishListItem> items;
+
+    public WishList() {
+        items = new LinkedList<WishListItem>();
+    }
+
+    public boolean addProduct(Product product, int quantity) {
+
+        WishListItem existing =
+            findProduct(product.getProductID());
+
+        if (existing != null) {
+            existing.setQuantity(quantity);
+            return true;
+        }
+
+        WishListItem item =
+            new WishListItem(product, quantity);
+
+        items.add(item);
+
+        return true;
+    }
+
+    public WishListItem findProduct(String productID) {
+
+        for (WishListItem item : items) {
+
+            if (item.getProduct()
+                    .getProductID()
+                    .equals(productID)) {
+
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    public boolean updateQuantity(
+            String productID,
+            int quantity) {
+
+        WishListItem item =
+            findProduct(productID);
+
+        if (item == null) {
+            return false;
+        }
+
+        item.setQuantity(quantity);
+        return true;
+    }
+
+    public Iterator<WishListItem> getWishlistItems() {
+        return items.iterator();
+    }
+}[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ cat Tes[K[K[K[K Simpel[K[Kle =[K[K.txt[K[K[K[K[K[K[KpleTester.java 
+[?2004l
+import java.util.Iterator;
+
+public class SimpleTester {
+
+    public static void main(String[] args) {
+
+        Product p1 = new Product("Mango", 5, 20);
+        Product p2 = new Product("Avocado", 5, 10.50);
+        Product p3 = new Product("Phone", 1, 200);
+        Product p4 = new Product("Computer", 4, 1500);
+
+        WishList wishlist = new WishList();
+
+        System.out.println(wishlist.addProduct(p1, 2)
+                + " should be true");
+
+        System.out.println(wishlist.addProduct(p2, 3)
+                + " should be true");
+
+        WishListItem item =
+                wishlist.findProduct(p1.getProductID());
+
+        System.out.println(item.getQuantity()
+                + " should be 2");
+
+        System.out.println(
+                wishlist.updateQuantity(p1.getProductID(), 5)
+                + " should be true");
+
+        item = wishlist.findProduct(p1.getProductID());
+
+        System.out.println(item.getQuantity()
+                + " should be 5");
+
+        System.out.println(
+                wishlist.updateQuantity("fakeID", 10)
+                + " should be false");
+
+        wishlist.addProduct(p1, 10);
+
+        item = wishlist.findProduct(p1.getProductID());
+
+        System.out.println(item.getQuantity()
+                + " should be 10");
+
+        System.out.println(wishlist.addProduct(p3, 1)
+                + " should be true");
+
+        System.out.println(wishlist.addProduct(p4, 2)
+                + " should be true");
+
+        Iterator<WishListItem> items =
+                wishlist.getWishlistItems();
+
+        System.out.println();
+        System.out.println("List of wishlist items");
+        System.out.println("----------------------");
+
+        while (items.hasNext()) {
+
+            WishListItem currentItem = items.next();
+            Product product = currentItem.getProduct();
+
+            System.out.println("Product ID: " + product.getProductID());
+            System.out.println("Name: " + product.getName());
+            System.out.println("Price: $" + product.getSalePrice());
+            System.out.println("Wishlist Quantity: " + currentItem.getQuantity());
+            System.out.println("----------------------");
+        }
+    }
+}
+[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ java SimpleT[K[K[K[K[K[K[K[K[K[K[K[Kjavac SimpleTester.java 
+[?2004l[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ java SimpleTester 
+[?2004ltrue should be true
+true should be true
+2 should be 2
+true should be true
+5 should be 5
+false should be false
+10 should be 10
+true should be true
+true should be true
+
+List of wishlist items
+----------------------
+Product ID: PR1
+Name: Mango
+Price: $20.0
+Wishlist Quantity: 10
+----------------------
+Product ID: PR2
+Name: Avocado
+Price: $10.5
+Wishlist Quantity: 3
+----------------------
+Product ID: PR3
+Name: Phone
+Price: $200.0
+Wishlist Quantity: 1
+----------------------
+Product ID: PR4
+Name: Computer
+Price: $1500.0
+Wishlist Quantity: 2
+----------------------
+[?2004h[0;32m@maigaPassword [0m➜ [1;34m/workspaces/Project1Individual/individual1 [0;36m([1;31mmain[0;36m) [0m$ exit
+[?2004lexit
+
+Script done on 2026-09-26 14:29:21+00:00 [COMMAND_EXIT_CODE="0"]
