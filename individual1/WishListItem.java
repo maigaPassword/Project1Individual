@@ -19,4 +19,12 @@ public class WishListItem {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    @Override 
+    public String toString(){
+        return " product: " + product.getName() +
+                " ID: " + product.getProductID()+
+                " Quantity: " + product.getQuantity()+
+                " Price: " + product.getSalePrice();
+    }
+
 }
